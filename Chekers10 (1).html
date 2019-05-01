@@ -1,0 +1,158 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<link rel="stylesheet" href="Chekers.css">	
+<div class="field"></div>
+<center><input type="button" class="start_button" value="Start" style="width: 150px;  height: 60px;" oncontextmenu="return false";>
+<input type="button" class="print_button" value="Print massive" style="width: 150px;  height: 60px;" oncontextmenu="return false";>
+<input class="load_input" style="width: 150px;  height: 60px;">
+<input type="button" class="load_button" value="LOad massive" style="width: 150px;  height: 60px;" oncontextmenu="return false";>
+<input type="button" class="clear" value="Clear" style="width: 150px;  height: 60px;" oncontextmenu="return false";>	
+</center>
+<center>
+Engine:   
+<input name="r1" class="engine" type="radio"> by Oleg
+<input name="r1" class="engine" type="radio"> by Yaroslav
+<input name="r1" class="engine" type="radio"> by Yaroslav (original)
+</center>
+<script src="algorythm10.js"></script>
+<script src="algorythm11.js"></script>
+<script src="algorythm12.js"></script>
+<script src="maze.js"></script>
+<script type="text/javascript">
+var amount;
+var square = [];
+var maze = [];
+var map = [];
+
+var field = document.querySelector(".field");
+
+loadMaze();
+
+var k = 0;
+var square_color = ["green", "gray", "gold", "black"];
+document.querySelector(".start_button").addEventListener("click", function(){
+
+
+if(document.querySelectorAll(".engine")[0].checked){
+maze = start(map);
+}
+else if(document.querySelectorAll(".engine")[1].checked){
+maze = start2(map);
+}
+else{
+maze = start3(map);
+}
+console.log(maze);
+for (var n = 0; n < amount; n++){
+  for (var i = 0; i < amount; i++){
+    square[n][i].style.background = square_color[map[n][i]];  
+  }
+  }      
+});
+console.log(map +" 2" );
+document.querySelector(".print_button").addEventListener("click", printMaze);
+document.querySelector(".load_button").addEventListener("click", loadMaze);
+document.querySelector(".clear").addEventListener("click", clearAll2);
+
+
+function printMaze(){
+	console.log(map);
+}
+
+function loadMaze(){
+	clearAll();		
+	map = [];
+	if(document.querySelector(".load_input").value){
+		map = JSON.parse(document.querySelector(".load_input").value);
+		amount = map[0].length;
+			// for (let i = 0; i < amount; i++){
+			// for (let n = 0; n < amount; n++){
+			// 	map[n] = [];
+			// }
+			// }	
+	}
+	else{
+		amount = maze2[0].length;
+		for (let n = 0; n < maze2[0].length; n++){
+			map[n] = [];
+		}		
+		for (var n = 0; n < maze2[0].length; n++){
+		for (var i = 0; i < maze2[0].length; i++){			
+			map[n][i] = maze2[n][i];
+		}
+		}	
+	}
+
+	drawField(); 
+
+	for (var n = 0; n < amount; n++){
+	for (var i = 0; i < amount; i++){
+		if(map[n][i] == 1){
+			square[n][i].style.background = "gray";		
+		}
+		else{		
+            square[n][i].style.background = "green";       	
+		}				
+	}
+	}
+}
+
+function clearAll(){
+
+
+	if(square[0] != undefined){
+		
+	    for (var n = 0; n < amount; n++){
+	    for (var i = 0; i < amount; i++){
+			field.removeChild(square[n][i]);   
+	    }
+	    }
+	  }  
+  
+}
+function clearAll2(){
+
+		
+	    for (var n = 0; n < amount; n++){
+	    for (var i = 0; i < amount; i++){
+			square[n][i].style.background = "gray";
+	    }
+	    }
+ 
+}
+
+function drawField(){
+
+	for (let i = 0; i < amount; i++){
+	for (let n = 0; n < amount; n++){
+		if (square[n] === undefined){
+			square[n] = [];
+			maze[n] = [];
+		}
+
+		mdiv = document.createElement('div');
+		mdiv.className = "square";
+		mdiv.style.width = (field.offsetWidth - 2 - 2*amount) / amount + "px";
+		mdiv.style.height = (field.offsetWidth - 2 - 2*amount) / amount + "px";
+		field.appendChild(mdiv);		
+		square[n][i] = document.querySelectorAll(".square")[i * amount + n];
+		square[n][i].addEventListener("click", function(){
+	            map[n][i] = 0;
+				this.style.background = "green";
+		});
+		square[n][i].addEventListener("contextmenu", function(e){
+				e.preventDefault();
+	            map[n][i] = 1;           
+				this.style.background = "gray";	
+		});
+
+	}
+	}
+}
+
+</script>
+</body>
+</html>
